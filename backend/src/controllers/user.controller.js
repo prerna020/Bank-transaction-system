@@ -2,6 +2,21 @@ import {User} from '../models/user.model.js'
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
+const generateAccessRefreshToken = async (userId) =>{
+    try {
+        const user = User.findById(userId)
+        const accessToken = user.generateAccessToken();
+        const refreshToken = user.generateRefreshToken()
+
+        user.refreshToken = refreshToken
+        await user.save({ validateBeforeSave: false })
+        return {refreshToken, accessToken}
+
+    } catch (error) {
+        throw new ApiError(500, "Error in generating access and refresh token")
+    }
+}
+
 const register = async (req, res) => {
     const { username, email, password } = req.body;
 
