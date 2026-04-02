@@ -9,8 +9,7 @@ const accountSchema = new mongoose.Schema({
     }, 
     status:{
         enum: {
-            values: ['ACTIVE', 'FROZEN', 'CLOSED'],
-            message : "status can either be active or frozen or closed "
+            values: ['ACTIVE', 'FROZEN', 'CLOSED']
         },
     },
     currency: {
