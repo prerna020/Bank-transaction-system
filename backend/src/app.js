@@ -2,6 +2,8 @@ import express, { urlencoded } from 'express'
 import userRouter from './routes/user.route.js'
 import cookieParser from 'cookie-parser'
 import accountRouter from './routes/account.route.js'
+import transactionRouter from './routes/transaction.route.js'
+
 const app = express()
 
 
@@ -11,5 +13,5 @@ app.use(cookieParser())
 
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/account', accountRouter)
-
+app.use('/api/v1/transaction',transactionRouter)
 export { app }
