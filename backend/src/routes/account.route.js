@@ -5,7 +5,7 @@ import { verifyJWT } from '../middlewares/auth.middleware.js'
 const router = express.Router()
 
 router.route('/').post(verifyJWT, createAccount)
-router.route('/').post(verifyJWT, getAccounts)
+router.route('/getAccount').post(verifyJWT, getAccounts)
 router.route('/balance/:accountId').post(verifyJWT, getAccountBalance)
 
 

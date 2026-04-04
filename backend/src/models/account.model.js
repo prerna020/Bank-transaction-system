@@ -8,6 +8,7 @@ const accountSchema = new mongoose.Schema({
         index: true
     }, 
     status:{
+        type: String,
         enum: {
             values: ['ACTIVE', 'FROZEN', 'CLOSED']
         },
@@ -24,4 +25,4 @@ const accountSchema = new mongoose.Schema({
 // compound index 
 accountSchema.index({user: 1, status: 1})
 
-export default Account = mongoose.model("Account" , accountSchema)
+export const Account = mongoose.model("Account", accountSchema)

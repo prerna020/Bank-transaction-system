@@ -8,14 +8,18 @@ import cookie from 'cookie'
 const generateAccessRefreshToken = async (userId) =>{
     try {
         const user = await User.findById(userId)
-        const accessToken = user.generateAccessToken()
-        const refreshToken = user.generateRefreshToken()
+        if(!user){
+            throw new ApiError(400, "User not found")
+        }
+        const accessToken = await user.generateAccessToken()
+        const refreshToken = await user.generateRefreshToken()
         
         user.refreshToken = refreshToken
         await user.save({ validateBeforeSave: false })
         return {refreshToken, accessToken}
 
     } catch (error) {
+        console.error("GENERR:", error);
         throw new ApiError(500, "Error in generating access and refresh token")
     }
 }
@@ -46,7 +50,7 @@ const register = async (req, res) => {
         throw new ApiError(500, "Internal error while creating user")
     }
 
-    await sendRegistrationEmail(user.email, user.username)
+    // await sendRegistrationEmail(user.email, user.username)
 
     return res.status(201).json(
         new ApiResponse(201, createdUser, "User registered Successfully")

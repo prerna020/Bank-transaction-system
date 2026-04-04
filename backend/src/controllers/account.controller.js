@@ -1,4 +1,4 @@
-import Account from '../models/account.model.js'
+import {Account} from '../models/account.model.js'
 import { ApiError } from '../utils/ApiError.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 
