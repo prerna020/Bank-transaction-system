@@ -2,6 +2,7 @@ import { User } from "../models/user.model.js"
 import { ApiError } from "../utils/ApiError.js"
 import jwt, { decode } from 'jsonwebtoken'
 import { ApiResponse } from "../utils/ApiResponse.js"
+import { tokenBlackList } from "../models/blackList.model.js"
 
 
 export const verifyJWT = async (req, res, next) =>{
@@ -10,7 +11,14 @@ export const verifyJWT = async (req, res, next) =>{
         if(!token){
             throw new ApiError(401, "Unauthorized request")
         }
-    
+        
+        const isBlacklisted = await tokenBlackList.findOne({ token })
+        if (isBlacklisted) {
+            return res.status(401).json({
+                message: "Unauthorized access, token is invalid"
+            })
+        }
+
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         const user = await User.findById(decoded?._id).select(" -refreshToken")
     
@@ -28,6 +36,12 @@ export const authSystemUser = async (req,res, next) =>{
     const token = req.cookies.access_token ||  req.header("Authorization")?.replace("Bearer ", "")
     if(!token){
         throw new ApiError(401, "Unauthorized request")
+    }
+    const isBlacklisted = await tokenBlackList.findOne({ token })
+    if (isBlacklisted) {
+        return res.status(401).json({
+            message: "Unauthorized access, token is invalid"
+        })
     }
     try {
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)

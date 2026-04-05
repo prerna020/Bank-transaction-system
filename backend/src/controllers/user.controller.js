@@ -4,6 +4,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { sendRegistrationEmail } from '../services/email.service.js';
 import cookie from 'cookie'
+import { tokenBlackList } from '../models/blackList.model.js';
 
 const generateAccessRefreshToken = async (userId) =>{
     try {
@@ -99,4 +100,20 @@ const login = async (req, res) =>{
     )
 }
 
-export {register, login} 
+const logout = async(req,res) =>{
+    const token = req.cookies?.access_token ||  req.header("Authorization")?.replace("Bearer ", "")
+    if(!token){
+        throw new ApiError(401, "Unauthorized request")
+    }
+    await tokenBlackList.create({
+        token: token
+    })
+
+    res.clearCookie("token")
+
+    res.status(200).json({
+        message: "User logged out successfully"
+    })
+}
+
+export {register, login, logout} 
