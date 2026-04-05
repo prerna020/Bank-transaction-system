@@ -12,6 +12,7 @@ const accountSchema = new mongoose.Schema({
         enum: {
             values: ['ACTIVE', 'FROZEN', 'CLOSED']
         },
+        default: 'ACTIVE'
     },
     currency: {
         type: String,

@@ -5,7 +5,7 @@ import { ApiResponse } from '../utils/ApiResponse.js';
 const createAccount = async (req,res) => {
     try {
         const user = req.user;
-        const account = Account.create({
+        const account = await Account.create({
             user: user._id
         })
         res.status(201).json(

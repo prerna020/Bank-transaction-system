@@ -50,4 +50,26 @@ export async function sendRegistrationEmail(userEmail, name) {
   await sendEmail(userEmail, subject, text, html);
 }
 
+export const sendTransactionEmail = async (userEmail, name, amount, toAccount) => {
+    const subject = "Transaction Confirmation";
+    const text = `Hello ${name}, Thank you for completing the transaction.`;
+    const html = `
+        <h1>Transaction Confirmation</h1>
+        <p>Hello ${name}, welcome to our banking system.</p>
+        <p>Thank you for completing the transaction. Hope you have a great experience with us.</p>
+    `;
+    await sendEmail(userEmail, subject, text, html);
+}
+
+export const sendFailedTransactionEmail = async (userEmail, name, amount, toAccount) => {
+    const subject = "Transaction Failed";
+    const text = `Hello ${name}, Your transaction has failed.`;
+    const html = `
+        <h1>Transaction Failed</h1>
+        <p>Hello ${name}, Your transaction has failed of amount ${amount} to account ${toAccount}.</p>
+        <p>Sorry for the inconvenience. Hope you have a great experience with us.</p>
+    `;
+    await sendEmail(userEmail, subject, text, html);
+}
+
 export default transporter;
